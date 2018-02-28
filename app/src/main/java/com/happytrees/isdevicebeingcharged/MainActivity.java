@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
-                Toast.makeText(MainActivity.this,"connected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"connected to power source",Toast.LENGTH_SHORT).show();
             } else if(intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
-                Toast.makeText(MainActivity.this,"disconnected",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"disconnected from power source",Toast.LENGTH_SHORT).show();
             }
         }
     }

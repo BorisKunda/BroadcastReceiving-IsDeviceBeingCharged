@@ -9,8 +9,17 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 //IN THIS EXAMPLE BROADCAST RECEIVER REGISTERED THROUGH CODE INSTEAD OF MANIFEST OPTION
+
 public class MainActivity extends AppCompatActivity {
-//BROADCAST RECEIVER SHOULD BE UNREGISTERED onPause AND REGISTERED onResume
+
+//BROADCAST RECEIVER SHOULD BE UNREGISTERED onPause,if not unregistered it will continue receive broadcasts even when app is no longer active
+    //BROADCAST RECEIVER SHOULD BE REGISTERED onResume if was previously unregistered onPause,otherwise it will cease to function after app was brought to background once
+
+
+
+    PowerConnectedBCReceiver myPowerConnectedBCReceiver;
+    IntentFilter intentPowerOn;
+    IntentFilter intentPowerOff;
 
 
     @Override
@@ -20,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        PowerConnectedBCReceiver myPowerConnectedBCReceiver = new PowerConnectedBCReceiver();
+        myPowerConnectedBCReceiver = new PowerConnectedBCReceiver();
 
 
-        IntentFilter intentPowerOn = new IntentFilter();
+         intentPowerOn = new IntentFilter();
         intentPowerOn.addAction("android.intent.action.ACTION_POWER_CONNECTED");
         registerReceiver(myPowerConnectedBCReceiver, intentPowerOn);
 
 
-        IntentFilter intentPowerOff = new IntentFilter();
+        intentPowerOff = new IntentFilter();
         intentPowerOff.addAction("android.intent.action.ACTION_POWER_DISCONNECTED");
         registerReceiver(myPowerConnectedBCReceiver,intentPowerOff);
 
@@ -53,8 +62,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(myPowerConnectedBCReceiver);
+    }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(myPowerConnectedBCReceiver, intentPowerOn);
+        registerReceiver(myPowerConnectedBCReceiver,intentPowerOff);
+    }
 }
 
+//The onPause() and onResume() methods are called when the application is brought to the background and into the foreground again
